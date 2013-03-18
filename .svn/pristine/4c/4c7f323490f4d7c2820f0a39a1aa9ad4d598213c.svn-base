@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name='viewport' content='target-densitydpi=device-dpi,initial-scale=1,minimum-scale=.1,user-scalable=yes'/>
+<title>My HTML</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" src =drawerAr.js></script>
+</head>
+<body>
+<div id="mapContainer">
+<svg id ="map" xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <polyline id="linea" points=""
+  style="stroke-linejoin:round;fill:none;stroke:black;stroke-width:8;stroke-opacity " /> 
+    <circle id="start" cx="0" cy="0" r="0" stroke="black"
+  stroke-width="2" fill="red"/>
+      <circle id="end" cx="0" cy="0" r="0" stroke="black"
+  stroke-width="2" fill="red"/>
+  <circle id="currNode" cx="0" cy="0" r="0" stroke="black"
+  stroke-width="2" fill="blue"/>
+
+    <circle id="animationNode" cx="0" cy="0" r="0" stroke="black"
+  stroke-width="2" fill="blue"/>
+</svg>
+</div>
+
+
+
+<script language="javascript">
+
+
+   function openAndroidDialog() {
+       AndroidFunction.openAndroidDialog();
+   }
+  
+   function callFromActivity(msg){
+ document.getElementById("mytext").innerHTML = msg;
+   }
+</script>
+ -->
+</body>
+</html>

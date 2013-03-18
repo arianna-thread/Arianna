@@ -1,0 +1,96 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical"
+    android:textColor="#444444"
+    tools:context=".MainActivity" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/teseo_arianna_mosaic" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shadow2"
+        android:gravity="left|center_vertical"
+        android:padding="5dp"
+        android:text="@string/dashboard_event_name"
+        android:textColor="#BFBFBF"
+        android:textSize="@dimen/dashboard_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:height="0dp"
+        android:minHeight="80dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:onClick="goToMap"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/dashboard_logo_label_padding"
+                android:drawableTop="@drawable/sel"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/dashboard_maps_label" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="vertical"
+            android:onClick="pathList" >
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/dashboard_logo_label_padding"
+                android:drawableTop="@drawable/path_icon"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/dashboard_paths_label"
+                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/dashboard_logo_label_padding"
+                android:drawableTop="@drawable/poi_icon"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/dashboard_pois_label" />
+  
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

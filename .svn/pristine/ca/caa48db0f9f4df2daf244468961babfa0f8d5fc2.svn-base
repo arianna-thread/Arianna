@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/point_of_interest_detail_img"
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:contentDescription="@string/point_of_interest_detail_img_desc" />
+
+        <TextView
+            android:id="@+id/point_of_interest_detail_name"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
+
+        <CheckBox
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="prova" />
+
+        <TextView
+            android:id="@+id/point_of_interest_detail_desc"
+            android:layout_width="match_parent"
+            android:layout_height="128dp" />
+    </LinearLayout>
+
+</ScrollView>

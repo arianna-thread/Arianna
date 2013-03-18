@@ -1,0 +1,61 @@
+package fr.eurecom.mobserv.arianna.model;
+
+import java.util.List;
+
+public abstract class Model {
+
+	public static final int DATABASE_VERSION = 1;
+	public static final String DATABASE_NAME = "Arianna.db";
+	
+	//TODO implementare query create
+	public static final String SQL_CREATE_ENTRIES = "";
+	
+	//TODO implementare query delete (drop? truncate?)
+	public static final String SQL_DELETE_ENTRIES = null;
+
+	public Model() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	/**
+	 * Method for retrieving a model given its unique URI
+	 * @param uri
+	 * @return the model requested
+	 */
+	public static Model getByURI(String uri){
+		//TODO Implementare 
+		return null;
+	}
+	
+	public static List<Model> getByParam(){
+		//TODO decidere se serve e implementare
+		return null;
+	}
+	
+	/**
+	 * Save or update the entity on the db
+	 * @return false on failure, true on success
+	 */
+	public boolean save(){
+		//TODO implementare
+		return false;
+	}
+
+	/**
+	 * Delete the entity from the db
+	 * @return false on failure, true on success
+	 */
+	public boolean delete(){
+		//TODO implementare
+		return false;
+	}
+	
+	/**
+	 * Used by Model.save when entry is already in the db
+	 * @return false on failure, true on success
+	 */
+	protected boolean update(){
+		//TODO implementare
+		return false;
+	}
+}

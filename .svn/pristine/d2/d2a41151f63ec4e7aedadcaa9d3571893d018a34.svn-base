@@ -1,0 +1,59 @@
+	html, body{
+	margin:0;
+	padding: 0;
+	border: 0;
+	font-family: sans-serif;
+	font-size: 1.5em;
+}
+
+#map{
+	background-image: url(maze.png);
+	width: 1374px;
+	height: 1374px;
+	position: absolute;
+
+}
+#mapContainer{
+	/*position:absolute;*/
+}
+
+.cursor{
+
+	position: absolute;
+	/*-webkit-transform:rotate(15deg);*/
+}
+.curr{
+position: absolute;
+
+}
+.succ{
+	position: absolute;
+
+}
+img{
+-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+-webkit-focus-ring-color: rgba(0, 0, 0, 0);
+}
+
+
+
+.tooltip{
+    position: absolute;
+    opacity:0.9;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 7px;
+    background-color: white;
+    text-align: center;
+    padding: 8px 22px;
+
+}
+.rightArrow{
+    /*display:none;*/
+	/*position: absolute;*/
+	/*height:40px;
+	width: 40px;*/
+	/*top: 13px;
+	right: 4px;*/
+    height: 100%;
+}

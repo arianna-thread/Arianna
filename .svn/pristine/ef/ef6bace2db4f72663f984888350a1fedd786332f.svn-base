@@ -1,0 +1,237 @@
+package fr.eurecom.mobserv.arianna.model;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+public abstract class Model {
+
+	/*
+	 * DATABASE PROPERTIES
+	 */
+	public static final int DATABASE_VERSION = 1;
+	public static final String DATABASE_NAME = "Arianna.db";
+
+	/*
+	 * SQL SYNTAX CONSTANTS
+	 */
+	public static final String COMMA_SEP = ",";
+	public static final String TEXT_TYPE = " TEXT";
+	public static final String INT_TYPE = " INTEGER";
+	public static final String UNIQUE = " UNIQUE";
+	public static final String COORDINATE_TYPE = " REAL";
+	public static final String PRIMARY_KEY = " INTEGER PRIMARY KEY AUTOINCREMENT";
+
+	/*
+	 * MODEL PROPERTIES COLUMN NAME
+	 */
+	public static final String COLUMN_NAME_URI = "uri";
+
+	/*
+	 * ADDITIONAL TABLES
+	 */
+	public static final String TABLE_NAME_POI_PATH_RELATION = "poi_path_relation";
+	public static final String COLUMN_NAME_PATH_URI = "path_uri";
+	public static final String COLUMN_NAME_POI_URI = "poi_uri";
+
+	public static final String SQL_CREATE_TABLE_POI_PATH_RELATION = "CREATE TABLE "
+			+ Model.TABLE_NAME_POI_PATH_RELATION
+			+ " ("
+			+ Model.COLUMN_NAME_PATH_URI
+			+ Model.TEXT_TYPE
+			+ Model.COMMA_SEP
+			+ Model.COLUMN_NAME_POI_URI
+			+ Model.TEXT_TYPE
+			+ Model.COMMA_SEP
+			+ ")";
+
+	public static final String TABLE_NAME_POI_ATTRIBUTE = "poi_attribute";
+	public static final String COLUMN_NAME_ATTRIBUTE_KEY = "attribute_key";
+	public static final String COLUMN_NAME_ATTRIBUTE_VALUE = "attribute_value";
+
+	public static final String SQL_CREATE_TABLE_POI_ATTRIBUTE = "CREATE TABLE "
+			+ Model.TABLE_NAME_POI_ATTRIBUTE + " (" + Model.COLUMN_NAME_POI_URI
+			+ Model.TEXT_TYPE + Model.COMMA_SEP
+			+ Model.COLUMN_NAME_ATTRIBUTE_KEY + Model.TEXT_TYPE
+			+ Model.COMMA_SEP + Model.COLUMN_NAME_ATTRIBUTE_VALUE
+			+ Model.TEXT_TYPE + Model.COMMA_SEP + ")";
+
+	/*
+	 * GENERAL DROP STATEMENT
+	 */
+	public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS ";
+
+	/*
+	 * MODEL PROPERTIES
+	 */
+	private Context context;
+
+	private String uri;
+
+	/**
+	 * @author uccio
+	 */
+
+	/* Array with all the create table statements */
+	// TODO Check out if it gives problem when called by DbHelper
+	public static ArrayList<String> SQLCreateTableStatements = new ArrayList<String>();
+
+	static {
+		SQLCreateTableStatements.add(Event.SQL_CREATE_TABLE);
+		SQLCreateTableStatements.add(MapLevel.SQL_CREATE_TABLE);
+		SQLCreateTableStatements.add(NavigationNode.SQL_CREATE_TABLE);
+		SQLCreateTableStatements.add(NavigationLink.SQL_CREATE_TABLE);
+		SQLCreateTableStatements.add(PointOfInterest.SQL_CREATE_TABLE);
+		SQLCreateTableStatements.add(Path.SQL_CREATE_TABLE);
+		SQLCreateTableStatements.add(Category.SQL_CREATE_TABLE);
+		SQLCreateTableStatements.add(Model.SQL_CREATE_TABLE_POI_PATH_RELATION);
+		SQLCreateTableStatements.add(Model.SQL_CREATE_TABLE_POI_ATTRIBUTE);
+	}
+
+	/* Array with all the drop table statements */
+	// TODO Check out if it gives problem when called by DbHelper
+	public static ArrayList<String> SQLDropTableStatements = new ArrayList<String>();
+
+	static {
+		SQLDropTableStatements.add(Model.SQL_DROP_TABLE + Event.TABLE_NAME);
+		SQLDropTableStatements.add(Model.SQL_DROP_TABLE + MapLevel.TABLE_NAME);
+		SQLDropTableStatements.add(Model.SQL_DROP_TABLE
+				+ NavigationNode.TABLE_NAME);
+		SQLDropTableStatements.add(Model.SQL_DROP_TABLE
+				+ NavigationLink.TABLE_NAME);
+		SQLDropTableStatements.add(Model.SQL_DROP_TABLE
+				+ PointOfInterest.TABLE_NAME);
+		SQLDropTableStatements.add(Model.SQL_DROP_TABLE + Path.TABLE_NAME);
+		SQLDropTableStatements.add(Model.SQL_DROP_TABLE + Category.TABLE_NAME);
+		SQLDropTableStatements.add(Model.SQL_DROP_TABLE
+				+ Model.TABLE_NAME_POI_PATH_RELATION);
+		SQLDropTableStatements.add(Model.SQL_DROP_TABLE
+				+ Model.TABLE_NAME_POI_ATTRIBUTE);
+	}
+
+	public Model(Context context, String uri) {
+		this.context = context;
+		this.uri = uri;
+	}
+
+	/**
+	 * Method for retrieving a model given its unique URI
+	 * 
+	 * @param uri
+	 * @return the model requested
+	 */
+	public static Model getByURI(Class<?> classname, String uri, Context context) {
+		Model model = null;
+		SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+		try {
+			//get field declared as TABLE_NAME from specific model class
+			String table = (String) classname.getDeclaredField("TABLE_NAME")
+					.get(null);
+			// projection null in order to return all columns
+			//get field declared as COLUMNS_NAME from specific class of a model, it is an array containing all column names to select
+			String[] projection = (String[]) classname.getField("COLUMNS_NAME")
+					.get(null);
+			// Define 'where' part of query.
+			String selection = Model.COLUMN_NAME_URI + "=?";
+			// Specify arguments in placeholder order.
+			String[] selectionArgs = { uri };
+			Cursor cur = db.query(table, // The table to query
+					projection, // The columns to return
+					selection, // The columns for the WHERE clause
+					selectionArgs, // The values for the WHERE clause
+					null, // don't group the rows
+					null, // don't filter by row groups
+					null // The sort order
+					);
+			/**
+			 * TODO aggiungere costruttore che riceve un oggetto Cursor per ogni
+			 * Model
+			 */
+			// Retrieve the right constructor for the specific class of a model
+			Constructor<?> constructor = classname.getConstructor(new Class[] { Context.class,Cursor.class });
+			model = (Model) constructor.newInstance(context,cur);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return model;
+	}
+	
+	public static List<Model> getByParam() {
+		// TODO decidere se serve e implementare
+		return null;
+	}
+
+	/**
+	 * Save or update the entity on the db
+	 * 
+	 * @return false on failure, true on success
+	 */
+	public abstract boolean save();
+
+	/**
+	 * Delete the entity from the db
+	 * 
+	 * @return false on failure, true on success
+	 */
+	public boolean delete() {
+		SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+		String whereClause = COLUMN_NAME_URI + " = ?";
+		String[] whereArgs = { this.getUri() };
+		int numRowAffected = db.delete(this.getTableName(), whereClause,
+				whereArgs);
+
+		if (numRowAffected != 1) {
+			return false;
+		}
+		return true;
+	}
+
+	protected abstract String getTableName();
+
+	/**
+	 * Used by Model.save when entry is already in the db
+	 * 
+	 * @return false on failure, true on success
+	 */
+	protected boolean update() {
+
+		// TODO implementare
+		return false;
+	}
+
+	/********************************************************
+	 * * GETTER AND SETTERS * *
+	 ********************************************************/
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
+
+}

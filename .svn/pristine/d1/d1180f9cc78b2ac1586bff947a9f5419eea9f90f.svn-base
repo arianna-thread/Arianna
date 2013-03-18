@@ -1,0 +1,40 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:textColor="#444444"
+        tools:context=".MainActivity" >
+
+        <ImageView
+            android:id="@+id/path_detail_img"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/path_thumbnail_desc" />
+
+        <TextView
+            android:id="@+id/path_detail_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shadow2"
+            android:gravity="left|center_vertical"
+            android:padding="5dp"
+            android:text="@string/dashboard_event_name"
+            android:textColor="#BFBFBF"
+            android:textSize="@dimen/dashboard_title" />
+
+        <TextView
+            android:id="@+id/path_detail_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <ListView
+            android:id="@+id/path_detail_poi_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+        
+</LinearLayout>

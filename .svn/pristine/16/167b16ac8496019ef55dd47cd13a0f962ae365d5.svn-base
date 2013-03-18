@@ -1,0 +1,93 @@
+package fr.eurecom.mobserv.arianna.model;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
+
+public class MapLevel extends Model implements BaseColumns {
+
+	
+	public final static String TABLE_NAME = "map_level";
+	public final static String COLUMN_NAME_ENTRY_NAME = "name";
+	public final static String COLUMN_NAME_ENTRY_MAP_IMAGE = "map_image";
+	
+	public final static String SQL_CREATE_TABLE = 
+			"CREATE TABLE " + TABLE_NAME + " (" +
+				    _ID + Model.PRIMARY_KEY + COMMA_SEP +
+				    COLUMN_NAME_URI + TEXT_TYPE + UNIQUE + COMMA_SEP +
+				    COLUMN_NAME_ENTRY_NAME + TEXT_TYPE + COMMA_SEP +
+				    COLUMN_NAME_ENTRY_MAP_IMAGE + TEXT_TYPE + COMMA_SEP+" )";
+						
+	private String name;
+	private String map_image;
+
+
+	/**
+	 * @param context
+	 * @param uri
+	 * @param name
+	 * @param map_image
+	 */
+	
+	
+	public MapLevel(Context context, String uri, String name, String map_image) {
+		super(context, uri);
+		this.name = name;
+		this.map_image = map_image;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the map_image
+	 */
+	public String getMap_image() {
+		return map_image;
+	}
+
+	/**
+	 * @param map_image the map_image to set
+	 */
+	public void setMap_image(String map_image) {
+		this.map_image = map_image;
+	}
+
+	@Override
+	protected String getTableName() {
+		return TABLE_NAME;
+	}
+	
+	@Override
+	public boolean save() {
+		// Gets the data repository in write mode
+		SQLiteDatabase db = DbHelper.getInstance(this.getContext()).getWritableDatabase();
+	
+		// Create a new map of values, where column names are the keys
+		ContentValues values = new ContentValues();
+		values.put(Model.COLUMN_NAME_URI,this.getUri());
+		values.put(MapLevel.COLUMN_NAME_ENTRY_MAP_IMAGE,this.getMap_image());
+		values.put(MapLevel.COLUMN_NAME_ENTRY_NAME,this.getName());
+		// Insert the new row, returning the primary key value of the new row
+		long newRowId;
+		newRowId = db.insert(
+		         MapLevel.TABLE_NAME,
+		         null,
+		         values);
+		return newRowId>=0;
+	}
+
+
+}

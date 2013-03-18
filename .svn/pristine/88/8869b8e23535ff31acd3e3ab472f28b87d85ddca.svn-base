@@ -1,0 +1,162 @@
+package fr.eurecom.mobserv.arianna.model;
+
+import java.util.Map;
+
+import android.content.Context;
+import android.provider.BaseColumns;
+
+public class Company extends Model implements BaseColumns {
+	
+	public final static String TABLE_NAME = "company";
+	public final static String COLUMN_NAME_ENTRY_COMPAY_NAME = "company_name";
+	public final static String COLUMN_NAME_ENTRY_EVENT = "event";
+	public final static String COLUMN_NAME_ENTRY_ADDRESS = "address";
+	public final static String COLUMN_NAME_ENTRY_IMAGE = "image";
+	public final static String COLUMN_NAME_ENTRY_MAP = "map";
+	public final static String COLUMN_NAME_ENTRY_MAIL = "mail";
+	public final static String COLUMN_NAME_ENTRY_PHONE_NUMBER = "phone_number";
+	
+	
+	
+	private String company_name;
+	private String event;
+	private String address;
+	private String image;
+	private String map;
+	private String mail;
+	private String phoneNumber;
+
+	/**
+	 * @param context
+	 * @param uri
+	 * @param company_name
+	 * @param event
+	 * @param address
+	 * @param image
+	 * @param map
+	 * @param mail
+	 * @param phoneNumber
+	 */
+	public Company(Context context, String uri, String company_name,
+			String event, String address, String image, String map,
+			String mail, String phoneNumber) {
+		super(context, uri);
+		this.company_name = company_name;
+		this.event = event;
+		this.address = address;
+		this.image = image;
+		this.map = map;
+		this.mail = mail;
+		this.phoneNumber = phoneNumber;
+	}
+
+	/**
+	 * @return the company_name
+	 */
+	public String getCompany_name() {
+		return company_name;
+	}
+
+	/**
+	 * @param company_name the company_name to set
+	 */
+	public void setCompany_name(String company_name) {
+		this.company_name = company_name;
+	}
+
+	/**
+	 * @return the event
+	 */
+	public String getEvent() {
+		return event;
+	}
+
+	/**
+	 * @param event the event to set
+	 */
+	public void setEvent(String event) {
+		this.event = event;
+	}
+
+	/**
+	 * @return the address
+	 */
+	public String getAddress() {
+		return address;
+	}
+
+	/**
+	 * @param address the address to set
+	 */
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	/**
+	 * @return the image
+	 */
+	public String getImage() {
+		return image;
+	}
+
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	/**
+	 * @return the map
+	 */
+	public String getMap() {
+		return map;
+	}
+
+	/**
+	 * @param map the map to set
+	 */
+	public void setMap(String map) {
+		this.map = map;
+	}
+
+	/**
+	 * @return the mail
+	 */
+	public String getMail() {
+		return mail;
+	}
+
+	/**
+	 * @param mail the mail to set
+	 */
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	/**
+	 * @return the phoneNumber
+	 */
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	/**
+	 * @param phoneNumber the phoneNumber to set
+	 */
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	@Override
+	public boolean save() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected String getTableName() {
+		return TABLE_NAME;
+	}
+
+}

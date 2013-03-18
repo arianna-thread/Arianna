@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sliding_menu_offset">80dp</dimen>
+    <dimen name="shadow_width">40dp</dimen>
+    <dimen name="dashboard_logo_label_padding">8dp</dimen>
+    <dimen name="textDetail">15dp</dimen>
+    <dimen name="textPadding">15dp</dimen>
+    <dimen name="paddinfRightTitle">15dp</dimen>
+    
+</resources>

@@ -1,0 +1,77 @@
+package fr.eurecom.mobserv.arianna.model;
+
+import java.util.List;
+
+import android.content.Context;
+import android.provider.BaseColumns;
+
+/**
+ * @author dani
+ *
+ */
+public class Path extends Model implements BaseColumns{
+	public static final String TABLE_NAME = "path";
+	public static final String COLUMN_NAME_TITLE = "title";
+    public static final String COLUMN_NAME_DESC = "description";
+    
+    private String title;
+    private String description;
+    private List<PointOfInterest> POIs;
+    
+    /**
+     * Path of PointOfInterest
+     * @param context
+     * @param uri
+	 * @param title
+	 * @param description
+	 */
+	public Path(Context context, String uri, String title, String description) {
+		super(context,uri);
+		this.title = title;
+		this.description = description;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	
+	@Override
+	public boolean save() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected String getTableName() {
+		return TABLE_NAME;
+	}
+    
+}

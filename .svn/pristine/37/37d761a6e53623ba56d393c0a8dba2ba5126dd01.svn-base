@@ -1,0 +1,43 @@
+package fr.eurecom.mobserv.arianna;
+
+import fr.eurecom.mobserv.arianna.model.DbHelper;
+import fr.eurecom.mobserv.arianna.model.Model;
+import fr.eurecom.mobserv.arianna.model.PointOfInterest;
+import android.os.Bundle;
+import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.view.Menu;
+
+public class Dashboard extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_dashboard);
+		
+		/** TODO 
+		 * Da testare db**/
+		Log.w("ARIANNA", "starting");
+		try{
+		SQLiteDatabase db = DbHelper.getInstance(getApplicationContext()).getWritableDatabase();
+		//DbHelper.getInstance(getApplicationContext()).onCreate(db);
+		DbHelper.getInstance(getApplicationContext()).onUpgrade(db, 0, 0);
+		}catch(Exception e){
+			Log.w("ARIANNA", e);
+		}
+		PointOfInterest poi1=new PointOfInterest(getApplicationContext(), "1", "Gioconda", "Rinascimento", "Image",null);
+		poi1.save();
+		PointOfInterest poi2 = (PointOfInterest) Model.getByURI(PointOfInterest.class, "1", getApplicationContext());
+	
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_dashboard, menu);
+		return true;
+		
+	}
+
+}

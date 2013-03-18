@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <color name="dashboard_button_clicked">#7BBEED</color>
+    <color name="mainColor">#fb0</color>
+    <color name="barTitleUnderImage">#FFF</color>
+    <color name="actionBackground">#ebe7e7</color>
+    <color name="actionBackgroundEnd">#aaa</color>
+    <color name="black">#000</color>
+    <color name="white">#FFF</color>
+    <color name="grey">#e3e0e0</color>
+    <color name="drawerDivider">#666</color>
+    <color name="drawerBackground">#444</color>
+    <color name="textMainColor">#444444</color>
+
+
+</resources>

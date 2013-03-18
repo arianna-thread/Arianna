@@ -1,0 +1,110 @@
+package fr.eurecom.mobserv.arianna.model;
+
+import java.util.Map;
+
+import android.content.Context;
+import android.provider.BaseColumns;
+
+public class PointOfInterest extends Model implements BaseColumns {
+	public final static String TABLE_NAME = "point_of_interest";
+	public final static String COLUMN_NAME_ENTRY_TITLE = "title";
+	public final static String COLUMN_NAME_ENTRY_SUBTITLE = "subtitle";
+	public final static String COLUMN_NAME_ENTRY_DESCRIPTION = "description";
+	public final static String COLUMN_NAME_ENTRY_IMAGE = "image";
+	public final static String COLUMN_NAME_ENTRY_PROPERTY = "property";
+
+	private String title;
+	private String subTitle;
+	private String description;
+	private Map<String,String> properties;
+	
+
+
+	/**
+	 * @param context
+	 * @param uri
+	 * @param title
+	 * @param subTitle
+	 * @param description
+	 * @param properties
+	 */
+	public PointOfInterest(Context context, String uri, String title,
+			String subTitle, String description, Map<String, String> properties) {
+		super(context, uri);
+		this.title = title;
+		this.subTitle = subTitle;
+		this.description = description;
+		this.properties = properties;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * @return the subTitle
+	 */
+	public String getSubTitle() {
+		return subTitle;
+	}
+
+	/**
+	 * @param subTitle the subTitle to set
+	 */
+	public void setSubTitle(String subTitle) {
+		this.subTitle = subTitle;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @return the properties
+	 */
+	public Map<String, String> getProperties() {
+		return properties;
+	}
+
+	/**
+	 * @param properties the properties to set
+	 */
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
+	}
+
+	@Override
+	public boolean save() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected String getTableName() {	
+		return TABLE_NAME;
+	}
+	
+	
+	
+	
+}

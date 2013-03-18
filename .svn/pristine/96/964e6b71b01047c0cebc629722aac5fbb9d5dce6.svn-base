@@ -1,0 +1,81 @@
+package fr.eurecom.mobserv.arianna.model;
+
+import android.content.Context;
+import android.provider.BaseColumns;
+
+/**
+ * @author dani
+ *
+ */
+public class NavigationLink extends Model implements BaseColumns{
+	public static final String TABLE_NAME = "navigation_link";
+	public static final String COLUMN_NAME_FROM_NODE = "from_node";
+    public static final String COLUMN_NAME_TO_NODE = "to_node";
+    public static final String COLUMN_NAME_MAP_LEVEL = "map_level";
+    
+    private String toNode;
+    private String fromNode;
+    private String mapLevel;
+    
+    
+	/**
+	 * NavigationLink between 2 nodes
+	 * @param context
+     * @param uri
+	 * @param toNode
+	 * @param fromNode
+	 * @param mapLevel
+	 */
+	public NavigationLink(Context context, String uri, String toNode, String fromNode, String mapLevel) {
+		super(context,uri);
+		this.toNode = toNode;
+		this.fromNode = fromNode;
+		this.mapLevel = mapLevel;
+	}
+	/**
+	 * @return the toNode
+	 */
+	public String getToNode() {
+		return toNode;
+	}
+	/**
+	 * @param toNode the toNode to set
+	 */
+	public void setToNode(String toNode) {
+		this.toNode = toNode;
+	}
+	/**
+	 * @return the fromNode
+	 */
+	public String getFromNode() {
+		return fromNode;
+	}
+	/**
+	 * @param fromNode the fromNode to set
+	 */
+	public void setFromNode(String fromNode) {
+		this.fromNode = fromNode;
+	}
+	/**
+	 * @return the mapLevel
+	 */
+	public String getMapLevel() {
+		return mapLevel;
+	}
+	/**
+	 * @param mapLevel the mapLevel to set
+	 */
+	public void setMapLevel(String mapLevel) {
+		this.mapLevel = mapLevel;
+	}
+	@Override
+	public boolean save() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	protected String getTableName() {
+		return TABLE_NAME;
+	}
+    
+}

@@ -1,0 +1,47 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:textColor="#444444"
+        tools:context=".MainActivity" >
+
+        <ImageView
+            android:id="@+id/imagePath"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/teseo_arianna_mosaic" />
+
+        <TextView
+            android:id="@+id/textTitlePath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shadow2"
+            android:gravity="left|center_vertical"
+            android:padding="5dp"
+            android:text="@string/dashboard_event_name"
+            android:textColor="#BFBFBF"
+            android:textSize="@dimen/dashboard_title" />
+
+        <TextView
+            android:id="@+id/textPathDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <ListView
+            android:id="@+id/poi_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,438 @@
+var arianna = ( function (arianna) {
+	"use strict";
+
+	arianna.drawer = (function (drawer) {
+
+		var drawCurrNode = function () {
+				drawer.currNode = document.getElementById("currNode");
+				drawer.currNode.setAttribute("cx", drawer.state.currNode.x);
+				drawer.currNode.setAttribute("cy", drawer.state.currNode.y);
+				drawer.currNode.setAttribute("r", 10);
+			};
+
+
+		var drawPathFunc = function (color) {
+				if (drawer.path) {
+					this.linea = document.getElementById("linea");
+					var start = document.getElementById("start");
+					var end = document.getElementById("end");
+					var stringa = this.points.map(function (e) {
+						return e.x + " " + e.y;
+					}).join(", ");
+
+					this.linea.setAttribute("points", stringa);
+					this.linea.setAttribute("style", 'stroke-linejoin:round;fill:none;stroke:black;stroke-width:8;opacity:0.4;');
+
+					start.setAttribute("cx", this.points[0].x);
+					start.setAttribute("cy", this.points[0].y);
+					start.setAttribute("r", 10);
+
+					end.setAttribute("cx", this.points[this.points.length - 1].x);
+					end.setAttribute("cy", this.points[this.points.length - 1].y);
+					end.setAttribute("r", 10);
+				}
+			};
+
+		var removeTooltips = function () {
+				this.pois.forEach(function (e) {
+					if (e.visible) {
+						e.visible = !e.visible;
+					}
+				});
+			};
+
+
+		var drawPoisFunct = function (callback) {
+				//drawer.state = drawer.state || {};
+				drawer.callback = callback;
+				this.pois.forEach(function (p) {
+					drawer.toolCallback = drawer.toolCallback || callback;
+					p.callback = callback;
+					if (p.uri && p.uri === (drawer.state.curr )) {
+						p.draw("curr");
+					} else if (p.uri && p.uri === (drawer.state.succ )) {
+						p.draw("succ");
+					} else {
+						p.draw("cursor");
+					}
+
+				});
+
+			};
+
+
+		drawer.removePois = function () {
+			var container = document.getElementById("mapContainer");
+			drawer.pois.forEach(function (e) {
+				container.removeChild(e.el);
+			});
+		};
+
+
+		// var drawAnimationNode=function(x,y){
+		// 		drawer.animationNode = document.getElementById("animationNode");
+		// 		var x = drawer.animationNode.cx;
+		// 		var y = drawer.animationNode.cy;
+		// 		drawer.currNode.setAttribute("cx", x+5);
+		// 		drawer.currNode.setAttribute("cy", y+5);
+		// 		drawer.currNode.setAttribute("r", 10);
+		// 		if( nodo1.x==nodo2.x){
+		// 			clearInterval ( interval);
+		// 		}
+		// };
+		drawer.animateBetweenNodes = function (nodo1, nodo2, callback) {
+			var speed = 3;
+            var time = 2;
+			//drawer.animationNode.setAttribute("cx", nodo1.x);
+			//drawer.animationNode.setAttribute("cy", nodo1.y);
+			//drawer.animationNode.setAttribute("r", 10);
+			if (nodo1.y == nodo2.y) {
+				var muovi = function () {
+						//drawer.animationNode = document.getElementById("animationNode");
+						var x = Number(drawer.currNode.getAttribute('cx'));
+						var y = Number(drawer.currNode.getAttribute('cy') * 1);
+						var xan;
+						if (nodo1.x > nodo2.x) {
+							xan = x - speed;
+						} else {
+							xan = x + speed;
+						}
+						drawer.currNode.setAttribute("cx", xan);
+						drawer.currNode.setAttribute("cy", y);
+						if (nodo1.x > nodo2.x) {
+							if (x > nodo2.x) {
+								setTimeout(muovi, time);
+							} else {
+								callback();
+							}
+						} else {
+							if (x < nodo2.x) {
+								setTimeout(muovi, time);
+							} else {
+								callback();
+							}
+						}
+					};
+			} else if (nodo1.x == nodo2.x) {
+				var muovi = function () {
+						//drawer.currNode = document.getElementById("animationNode");
+						var x = Number(drawer.currNode.getAttribute('cx'));
+						var y = Number(drawer.currNode.getAttribute('cy') * 1);
+						var yan;
+
+						if (nodo1.y > nodo2.y) {
+							yan = y - speed;
+						} else {
+							yan = y + speed;
+						}
+						var xAn = drawer.currNode.setAttribute("cx", x);
+						drawer.currNode.setAttribute("cy", yan);
+						if (nodo1.y > nodo2.y) {
+							if (y > nodo2.y) {
+								setTimeout(muovi, time);
+							} else {
+								callback();
+							}
+						} else {
+							if (y < nodo2.y) {
+								setTimeout(muovi, time);
+							} else {
+								callback();
+							}
+						}
+					};
+
+
+			}
+			muovi();
+
+		};
+
+
+		drawer.getNodeIndexByUri = function (uri) {
+			var filtered = drawer.path.points.filter(function (el, index) {
+				return uri == el.uri;
+			});
+			return drawer.path.points.indexOf(filtered[0]);
+		};
+		drawer.getNodeIndexByPosition = function (node) {
+			var filtered = drawer.path.points.filter(function (el, index) {
+				return nodesEqual(node, el);
+			});
+			return drawer.path.points.indexOf(filtered[0]);
+		};
+
+
+		drawer.animate = function (oldstate) {
+			var start = drawer.getNodeIndexByPosition(oldstate.currNode);
+			var end = drawer.getNodeIndexByPosition(drawer.state.currNode);
+			//drawer.animationNode = document.getElementById("animationNode");
+			var i;
+			var direction;
+			if (start < end) {
+				direction = 1;
+			} else {
+				direction = -1
+			}
+
+
+			i = start;
+			var nodoCurr = drawer.path.points[i];
+			var dest = drawer.path.points[i + direction];
+			var step = function () {
+					i += direction;
+					nodoCurr = drawer.path.points[i];
+					dest = drawer.path.points[i + direction];
+
+					if (nodesEqual(nodoCurr, drawer.path.points[end])) {
+						return;
+					}
+
+
+					drawer.animateBetweenNodes(nodoCurr, dest, step);
+
+				};
+
+			drawer.animateBetweenNodes(nodoCurr, dest, step);
+
+
+			//setTimeout(doSomething,500); 
+		};
+
+		var nodesEqual = function (nodeA, nodeB) {
+				return (nodeA.x === nodeB.x && nodeA.y === nodeB.y);
+			}
+
+
+		var setState = function (state) {
+
+				var oldState = drawer.state;
+				if (drawer.state) {
+					drawer.state = state;
+					drawer.removePois();
+					drawer.animate(oldState);
+					drawer.drawPois(drawer.callback);
+
+				}
+				drawer.state = state;
+
+
+				//drawer.drawPois (callback);
+				//drawCurrNode();
+			};
+
+
+		var drawPoiFunc = function (cursor) {
+
+				this.el = document.createElement("img");
+				this.el.classList.add(cursor);
+				this.el.classList.add("cursor");
+				var source = cursor + ".png";
+				this.el.setAttribute("src", source);
+				var that = this;
+				this.el.onload = function () {
+
+					var lato = this.width;
+					var x = that.x - lato / 2;
+					var y = that.y - this.height + 10;
+					this.style.left = x + "px";
+					this.style.top = y + "px";
+
+					this.onclick = that.toogle.bind(that);
+					that.container.appendChild(this);
+				};
+			};
+
+		drawer.setState = setState;
+		drawer.drawPois = drawPoisFunct;
+		drawer.removeTooltips = removeTooltips;
+
+		drawer.init = function (idmap, path, pois, stato) {
+			//arianna.drawer.state = stato;
+			var poisArray = [];
+			pois.forEach(function (p) {
+				// for(i in pois) {
+				var myPoi = Object.create(p);
+
+				myPoi.draw = drawPoiFunc;
+				myPoi.container = document.getElementById("mapContainer");
+				myPoi.isvisible = false;
+				myPoi.toogle = function () {
+					this.visible = !this.visible;
+				};
+				Object.defineProperty(myPoi, "visible", {
+					set: function (value) {
+						if (value) {
+
+							drawer.removeTooltips();
+							this.tooltip = document.createElement("div");
+							this.tooltip.classList.add("tooltip");
+							var arrow = document.createElement("img");
+							arrow.classList.add("rightArrow");
+							arrow.setAttribute("alt", "alt");
+							arrow.setAttribute("src", "rightArrow.png");
+							this.tooltip.textContent = this.title;
+							this.tooltip.appendChild(arrow);
+
+							var lato = this.el.width;
+							var x = this.x + lato / 2 - 20;
+							var y = this.y - lato - 90;
+							this.tooltip.style.left = x + "px";
+							this.tooltip.style.top = y + "px";
+
+							this.tooltip.onclick = this.callback.bind(this);
+
+							this.container.appendChild(this.tooltip);
+							this.isvisible = true;
+
+						} else {
+							this.container.removeChild(this.tooltip);
+							this.isvisible = false;
+						}
+
+					},
+					get: function () {
+						return this.isvisible;
+
+					}
+				});
+				poisArray.push(myPoi);
+			});
+			//var myPath = Object.create(path);
+			//myPath.draw = drawPathFunc;
+			drawer.pois = poisArray;
+			var rightPath;
+			if (path) {
+				rightPath = {
+					points: path
+				};
+				rightPath.draw = drawPathFunc;
+			} else {
+				rightPath = undefined;
+			}
+
+			drawer.path = rightPath;
+
+			drawer.setState(stato);
+			drawCurrNode();
+
+		};
+
+		return drawer;
+
+	}(arianna.drawer || {}));
+
+	return arianna;
+
+}(arianna || {}));
+
+
+window.onload = function () {
+	var p0 = {
+		uri: 1,
+		x: 660,
+		y: 75,
+		title: "paolo"
+
+	};
+
+	var p1 = {
+		uri: 2,
+		x: 308,
+		y: 830,
+		title: "dani"
+	};
+	var p2 = {
+		uri: 3,
+		x: 308,
+		y: 392,
+		title: "mauri"
+
+	};
+	var p3 = {
+		uri: 4,
+		x: 185,
+		y: 392,
+		title: "mauri"
+	};
+	var p4 = {
+		uri: 5,
+		x: 430,
+		y: 490,
+		title: "gesu"
+	};
+	var p = [p0, p1, p2, p3, p4];
+
+	var path = {
+		points: p
+	};
+
+
+	stato1 = {
+		succ: "P2",
+		currNode: p0
+
+	};
+	stato2 = {
+		curr: 2,
+		succ: 4,
+		currNode: p1
+
+
+	};
+
+	stato3 = {
+		curr: 3,
+		succ: 4,
+		currNode: p2
+
+
+	};
+
+	stato4 = {
+		curr: 4,
+		succ: 5,
+		currNode: p3
+
+
+	};
+	stato5 = {
+		curr: 5,
+		succ: 2,
+		currNode: p4
+
+
+	};
+
+	// path = JSON.parse('[{"x":660,"y":75},{"x":660,"y":105},{"x":780,"y":105},{"x":780,"y":165},{"x":660,"y":165},{"x":660,"y":345},{"x":600,"y":345},{"x":600,"y":405},{"x":720,"y":405},{"x":720,"y":345},{"x":780,"y":345},{"x":780,"y":405},{"x":900,"y":405},{"x":900,"y":525},{"x":840,"y":525},{"x":840,"y":465},{"x":660,"y":465},{"x":660,"y":525},{"x":780,"y":525},{"x":780,"y":585},{"x":720,"y":585},{"x":720,"y":585},{"x":600,"y":585},{"x":600,"y":525},{"x":300,"y":525},{"x":300,"y":525},{"x":240,"y":525},{"x":240,"y":765},{"x":300,"y":765},{"x":300,"y":825},{"x":240,"y":825},{"x":240,"y":885},{"x":300,"y":885},{"x":300,"y":945},{"x":180,"y":945},{"x":180,"y":1125},{"x":240,"y":1125},{"x":240,"y":1245},{"x":480,"y":1245},{"x":480,"y":1185},{"x":540,"y":1185},{"x":540,"y":1185},{"x":540,"y":1245},{"x":660,"y":1245},{"x":660,"y":1185},{"x":720,"y":1185},{"x":720,"y":1275}]');
+	// pois = JSON.parse('[{"title":"Entrance","x":660,"y":75,"uri":"P1"},{"title":"Yesterday night bones","x":240,"y":420,"uri":"P5"},{"title":"Minotaur","x":300,"y":585,"uri":"P3"},{"title":"Teseus e Arianne","x":450,"y":495,"uri":"P2"},{"title":"Restaurant \u0027Chez le Minotaur\u0027","x":300,"y":225,"uri":"P4"},{"title":"Dedalo","x":540,"y":1185,"uri":"P6"},{"title":"Toilets","x":1260,"y":870,"uri":"P7"},{"title":"Exit","x":720,"y":1275,"uri":"P8"}]');
+	pois = JSON.parse(AndroidFunction.getInitPois());
+	path = JSON.parse(AndroidFunction.getPath());
+
+    arianna.drawer.init("map", path, pois, JSON.parse(AndroidFunction.getJSInitState()));
+	// arianna.drawer.init("map", path, pois, stato1);
+	arianna.drawer.path.draw();
+	arianna.drawer.drawPois(function () {
+		var uri = this.uri;
+		AndroidFunction.startDetail(uri);
+		//
+	});
+
+	arianna.onClickNext = function () {
+		var stateString, state;
+		stateString = AndroidFunction.clickNext();
+		// document.body.innerHTML = (stateString);
+		state = JSON.parse(stateString);
+		// state = JSON.parse('{"curr":"P2","currNode":{"x":300,"y":525},"succ":"P8"}');
+		arianna.drawer.setState(state);
+	}
+    arianna.onClickPrev = function () {
+        var stateString, state;
+        stateString = AndroidFunction.clickPrev();
+        // document.body.innerHTML = (stateString);
+        state = JSON.parse(stateString);
+        // state = JSON.parse('{"currNode":{"x":300,"y":525},"succ":"P8"}');
+        arianna.drawer.setState(state);
+    }
+    // state = JSON.parse('{"currNode":{"x":300,"y":525},"succ":"P8"}');
+};

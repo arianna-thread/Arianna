@@ -1,0 +1,146 @@
+package fr.eurecom.mobserv.arianna.model;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
+
+/**
+ * @author dani
+ *
+ */
+public class NavigationLink extends Model implements BaseColumns{
+	public static final String TABLE_NAME = "navigation_link";
+	public static final String COLUMN_NAME_TO_NODE = "to_node";
+	public static final String COLUMN_NAME_FROM_NODE = "from_node";
+	public static final String COLUMN_NAME_MAP_LEVEL = "map_level";
+    public static final String COLUMN_NAME_POINTS="points";
+    public static final String[] COLUMNS_NAME={Model.COLUMN_NAME_URI,COLUMN_NAME_TO_NODE,COLUMN_NAME_FROM_NODE,COLUMN_NAME_MAP_LEVEL,COLUMN_NAME_POINTS};
+	
+    public static final String SQL_CREATE_TABLE =
+    	    "CREATE TABLE " + NavigationLink.TABLE_NAME + " (" +
+			    Path._ID + Model.PRIMARY_KEY + Model.COMMA_SEP +
+			    Model.COLUMN_NAME_URI + Model.TEXT_TYPE + UNIQUE+Model.COMMA_SEP +
+			    NavigationLink.COLUMN_NAME_FROM_NODE + Model.TEXT_TYPE + Model.COMMA_SEP +
+			    NavigationLink.COLUMN_NAME_TO_NODE + Model.TEXT_TYPE  + Model.COMMA_SEP +
+			    NavigationLink.COLUMN_NAME_MAP_LEVEL + Model.TEXT_TYPE  + Model.COMMA_SEP +
+			    NavigationLink.COLUMN_NAME_POINTS + Model.TEXT_TYPE + Model.COMMA_SEP +
+			    "FOREIGN KEY("+NavigationLink.COLUMN_NAME_FROM_NODE+") REFERENCES "+ NavigationNode.TABLE_NAME +"("+Model.COLUMN_NAME_URI+")"+COMMA_SEP+ 
+			    "FOREIGN KEY("+NavigationLink.COLUMN_NAME_TO_NODE+") REFERENCES "+ NavigationNode.TABLE_NAME +"("+Model.COLUMN_NAME_URI+")"+ COMMA_SEP+
+			    "FOREIGN KEY("+NavigationLink.COLUMN_NAME_MAP_LEVEL+") REFERENCES "+ MapLevel.TABLE_NAME +"("+Model.COLUMN_NAME_URI+")"+ 
+	    		")";
+    
+    private String toNode;
+    private String fromNode;
+    private String mapLevel;
+    private String points;
+    
+    /** TODO
+     * metodo parse della stringa points
+     */
+    
+	/**
+	 * NavigationLink between 2 nodes
+	 * @param context
+     * @param uri
+	 * @param toNode
+	 * @param fromNode
+	 * @param mapLevel
+	 */
+	public NavigationLink(Context context, String uri, String toNode, String fromNode, String mapLevel,String points) {
+		super(context,uri);
+		this.toNode = toNode;
+		this.fromNode = fromNode;
+		this.mapLevel = mapLevel;
+		this.points = points;
+	}
+	
+	/**
+	 * @param context
+	 * @param cursor result from query to map DB entry and JAVA object
+	 */
+	public NavigationLink(Context context, Cursor cursor) {
+		super(context,cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_URI)));
+		this.toNode = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TO_NODE));
+		this.fromNode =cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_FROM_NODE));
+		this.mapLevel = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_MAP_LEVEL));
+		this.points = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_POINTS));
+	}
+	
+	/**
+	 * @return the toNode
+	 */
+	public String getToNode() {
+		return toNode;
+	}
+	/**
+	 * @param toNode the toNode to set
+	 */
+	public void setToNode(String toNode) {
+		this.toNode = toNode;
+	}
+	/**
+	 * @return the fromNode
+	 */
+	public String getFromNode() {
+		return fromNode;
+	}
+	/**
+	 * @param fromNode the fromNode to set
+	 */
+	public void setFromNode(String fromNode) {
+		this.fromNode = fromNode;
+	}
+	/**
+	 * @return the mapLevel
+	 */
+	public String getMapLevel() {
+		return mapLevel;
+	}
+	/**
+	 * @param mapLevel the mapLevel to set
+	 */
+	public void setMapLevel(String mapLevel) {
+		this.mapLevel = mapLevel;
+	}
+	
+	@Override
+	public boolean save() {
+		// Gets the data repository in write mode
+		SQLiteDatabase db = DbHelper.getInstance(this.getContext()).getWritableDatabase();
+	
+		// Create a new map of values, where column names are the keys
+		ContentValues values = new ContentValues();
+		values.put(Model.COLUMN_NAME_URI,this.getUri());
+		values.put(NavigationLink.COLUMN_NAME_FROM_NODE,this.getFromNode());
+		values.put(NavigationLink.COLUMN_NAME_TO_NODE,this.getToNode());
+		values.put(NavigationLink.COLUMN_NAME_MAP_LEVEL,this.getMapLevel());
+		values.put(NavigationLink.COLUMN_NAME_POINTS,this.getPoints());
+		// Insert the new row, returning the primary key value of the new row
+		long newRowId;
+		newRowId = db.insert(
+		         NavigationLink.TABLE_NAME,
+		         NavigationLink.COLUMN_NAME_MAP_LEVEL,
+		         values);
+		return newRowId>=0;
+	}
+	
+	@Override
+	protected String getTableName() {
+		return TABLE_NAME;
+	}
+	/**
+	 * @return the points of a node link
+	 */
+	public String getPoints() {
+		return points;
+	}
+	/**
+	 * @param points the points to set
+	 */
+	public void setPoints(String points) {
+		this.points = points;
+	}
+    
+}
